@@ -1,0 +1,23 @@
+{
+  "name": "homography-camera-online",
+  "version": "1.0.0",
+  "description": "A web camara application can do homography transform",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd client && npm start\" \"cd server && npm start\""
+  },
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CollaboratorJohn/Homography-Camera-Online.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CollaboratorJohn/Homography-Camera-Online/issues"
+  },
+  "homepage": "https://github.com/CollaboratorJohn/Homography-Camera-Online#readme"
+}
