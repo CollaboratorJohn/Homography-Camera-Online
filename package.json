@@ -4,10 +4,11 @@
   "description": "A web camara application can do homography transform",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd client && npm start\" \"cd server && npm start\""
+    "start": "concurrently \"cd server && npm start\""
   },
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "http-proxy-middleware": "^2.0.6"
   },
   "repository": {
     "type": "git",
