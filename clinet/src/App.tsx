@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import { Layout, Menu } from 'antd';
-import MenuBar from './view/MenuBar';
+import AdminPage from './view/AdminPage';
 import Login from './login/login';
 
 
@@ -29,25 +29,13 @@ export default class App extends React.Component<{},State> {
         <Router>
           <Fragment>
             <Switch>
+            <Route path='/' exact render={()=> (
+               <Redirect to='/admin'/>
+            )}/>
             <Route exact path='/login'>
               <Login></Login>
             </Route>
-            <Route path='/admin' render = {
-              props => {
-                return (
-                  <MenuBar
-                  current_key = { this.state.key }
-                  list = {
-                    [
-                      {key:'0',label:'视频查看'},
-                      {key:'1',label:'视频校正'},
-                      {key:'2',label:'视频标注'},
-                    ]
-                  }
-                  stateChange = { this.changeState }
-                ></MenuBar>)
-              }
-            }>
+            <Route path='/admin' component={AdminPage}>
             </Route>              
             </Switch>
           </Fragment>

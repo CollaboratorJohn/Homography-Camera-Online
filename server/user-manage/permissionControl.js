@@ -7,7 +7,6 @@ const checkLoginMiddleware = (req, res, next) => {
         const user_id = req.cookies.user_id
         const sql_search = `select * from Users where user = \'${user}\' and passwd_hash = \'${user_id}\'`
         const result = getDb().prepare(sql_search)
-        console.log(sql_search)
         if(result.all().length !== 0) {
             next();
         } else {

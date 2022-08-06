@@ -1,0 +1,12 @@
+.title {
+    margin: 5px;
+    text-align: center;
+    font-size: large;
+    background-color: transparent;
+}
+
+.ant-layout {
+    display: flex!important;
+    width: 100%!important;
+    min-height: 100%!important;
+}

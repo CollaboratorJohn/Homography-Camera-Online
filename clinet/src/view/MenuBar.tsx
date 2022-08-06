@@ -1,12 +1,14 @@
 import React from 'react'
 import { Layout, Menu } from 'antd';
 import axios from 'axios'
+import { Route, BrowserRouter as Router, Switch, Redirect, Link } from 'react-router-dom';
 
-const { Header, Content, Sider } = Layout
+const { Header } = Layout
 interface Props {
     list: Array<{key: string, label: string}>,
     current_key: string,
-    stateChange: Function
+    stateChange: Function,
+    path: string
 }
 
 export default class MenuBar extends React.Component<Props,{}> {
@@ -35,13 +37,21 @@ export default class MenuBar extends React.Component<Props,{}> {
             <Header className='header'>
                 <Menu theme='dark'
                     mode='horizontal'
-                    selectedKeys={[this.props.current_key]}
-                    items={this.props.list}
-                    onClick={ ({key}) => {
-                        this.props.stateChange(key)
+                >
+                    {
+                        this.props.list.map(
+                            (item:{key: string, label: string}):JSX.Element => <Menu.Item
+                                key={item.key}
+                                onClick={ ({key}) => {
+                                    this.props.stateChange(key)
+                                    }
+                                }>
+                                    <Link to={`${this.props.path}/${item.key}`}>{item.label}</Link>
+                                </Menu.Item>
+                        )
                     }
-                }
-                ></Menu>
+                    
+                </Menu>
             </Header>
         )
     }
