@@ -18,10 +18,16 @@
     "immutability-helper": "^3.0.0",
     "leaflet": "^1.8.0",
     "leaflet-path-drag": "^1.8.0-beta.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hot-keys": "^2.7.2",
     "react-leaflet": "^4.0.1",
+    "react-redux": "^8.0.2",
     "react-router-dom": "^5.3.3",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1",
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "start": "set PORT=9000 &&react-scripts start",

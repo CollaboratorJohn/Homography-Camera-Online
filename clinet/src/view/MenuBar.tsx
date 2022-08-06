@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Menu } from 'antd';
 import axios from 'axios'
-import { Route, BrowserRouter as Router, Switch, Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const { Header } = Layout
 interface Props {
@@ -37,6 +37,7 @@ export default class MenuBar extends React.Component<Props,{}> {
             <Header className='header'>
                 <Menu theme='dark'
                     mode='horizontal'
+                    selectedKeys = {[this.props.current_key]}
                 >
                     {
                         this.props.list.map(

@@ -29,14 +29,15 @@ export default class App extends React.Component<{},State> {
         <Router>
           <Fragment>
             <Switch>
-            <Route path='/' exact render={()=> (
-               <Redirect to='/admin'/>
-            )}/>
-            <Route exact path='/login'>
-              <Login></Login>
-            </Route>
-            <Route path='/admin' component={AdminPage}>
-            </Route>              
+              <Route path='/' exact render={()=> (
+                <Redirect to='/admin'/>
+              )}/>
+              <Route exact path='/login'>
+                <Login></Login>
+              </Route>
+              <Route path='/admin'>
+                <AdminPage></AdminPage>
+              </Route>
             </Switch>
           </Fragment>
         </Router>

@@ -1,8 +1,58 @@
 .title {
     margin: 5px;
+    height: 28px;
     text-align: center;
     font-size: large;
     background-color: transparent;
+}
+
+.function-title {
+    margin: 5px;
+    height: 20px;
+    text-align: left;
+    font-size: medium;
+    background-color: transparent;
+}
+
+.button-set {
+    margin: 5px 15px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.distort-rect {
+    margin: 5px 15px;
+}
+
+.distort-rect .btn-set {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.camara-selected {
+    color:dodgerblue
+}
+
+.camara-list {
+    margin: 5px
+}
+
+.camara-list-item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ant-btn {
+    margin: 5px;
+}
+
+.order {
+    height: calc(100% - 38px)
 }
 
 .ant-layout {

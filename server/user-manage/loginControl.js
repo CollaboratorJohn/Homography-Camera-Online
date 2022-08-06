@@ -15,8 +15,8 @@ const loginUsrCallback = app => {
             res.json({message: '密码错误'})
             return
         } else {
-            res.cookie('user_id', result.all()[0].passwd_hash, { maxAge: 600000 })
-            res.cookie('user', result.all()[0].user, { maxAge: 600000 })
+            res.cookie('user_id', result.all()[0].passwd_hash, { maxAge: 60000000 })
+            res.cookie('user', result.all()[0].user, { maxAge: 60000000 })
             res.json({message: '登录成功'})
         }
     })
