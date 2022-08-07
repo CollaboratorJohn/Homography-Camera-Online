@@ -4,7 +4,7 @@
   "description": "A web camara application can do homography transform",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd server && npm start\""
+    "start": "concurrently \"cd server && npm run start\"  \"cd clinet && npm run start\""
   },
   "dependencies": {
     "concurrently": "^4.1.0",
