@@ -5,13 +5,13 @@ export default function reducer(state:{camera:string,camera_list:Array<string>} 
     switch(action.type) {
         case ADD:
             state.camera_list.push(action.camera)
-            return {// ...state,
+            return {
                 camera: action.camera,
                 camera_list: state.camera_list
             }
         case REMOVE:
             state.camera_list.splice(state.camera_list.indexOf(action.camera),1)
-            return {// ...state,
+            return {
                 camera: '',
                 camera_list: state.camera_list
             }

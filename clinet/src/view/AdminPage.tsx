@@ -28,6 +28,7 @@ class AdminPage extends React.Component<{},State> {
     }
     
     componentDidMount() {
+        // subscribe events
         store.subscribe(() => {
             console.log(store.getState())
             this.forceUpdate()
@@ -74,7 +75,7 @@ class AdminPage extends React.Component<{},State> {
                                                 <div className='camara-selected'>{'摄像头'+index}</div>
                                                 <CloseOutlined onClick={
                                                     () => {
-                                                        store.dispatch(onRemove('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream?tcp'))
+                                                        store.dispatch(onRemove('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
                                                     }
                                                 }/>
                                             </div>
@@ -85,9 +86,9 @@ class AdminPage extends React.Component<{},State> {
                             </div>
                             <Button type='primary' icon={<PlusOutlined/>
                             } onClick={()=>{
-                                store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream?tcp'))
+                                store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
                                 // this.setState({
-                                //     videolist: ['rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream?tcp']
+                                //     videolist: ['rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream']
                                 // })
                             }}>新增摄像头</Button>
                         </div>
@@ -97,7 +98,10 @@ class AdminPage extends React.Component<{},State> {
                             <Route path='/admin' exact render={()=> (
                                 <Redirect to='/admin/vid_ctrl'/>
                             )}/>
-                            <Route path={'/admin/vid_ctrl'} component={VideoControl}></Route>
+                            <Route path={'/admin/vid_ctrl'} render ={
+                                ():JSX.Element => 
+                                <VideoControl video_url={store.getState().camera}/>
+                            }></Route>
                             <Route path={'/admin/vid_rect'} component={VideoRectify}></Route>
                             <Route path={'/admin/vid_label'} component={VideoLabel}></Route>
                         </Switch>

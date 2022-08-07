@@ -47,12 +47,23 @@
     justify-content: space-between;
 }
 
-.ant-btn {
-    margin: 5px;
-}
-
 .order {
     height: calc(100% - 38px)
+}
+
+.video-area {
+    margin: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+}
+
+video {
+    height: 100%;
+    width: 100%
+}
+
+.ant-btn {
+    margin: 5px;
 }
 
 .ant-layout {

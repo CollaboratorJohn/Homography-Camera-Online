@@ -11,4 +11,10 @@ module.exports = function(app) {
                 "^/api": ""
         }})
     )
+    // app.use(
+    //     proxy('/rtsp', {
+    //         target:`ws://localhost:8000`,
+    //         changeOrigin: true
+    //     })
+    // )
 }

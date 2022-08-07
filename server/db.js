@@ -6,6 +6,7 @@ const sqlite_path = path.join(__dirname, '../database.db')
 
 const db = new sqlite(sqlite_path, {})
 
+// establish user table
 if(!fs.existsSync(sqlite_path)) { 
     const sql =`create table Users (
         id integer primary key autoincrement,

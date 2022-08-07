@@ -1,13 +1,51 @@
 import { Layout, Button } from "antd"
 import { ArrowUpOutlined, ArrowDownOutlined, ArrowLeftOutlined, ArrowRightOutlined, ReloadOutlined} from '@ant-design/icons'
 import React from 'react';
+import flv from 'flv.js'
 const { Content, Sider } = Layout
 
-export default class VideoControl extends React.Component {
+interface Props {
+    video_url: string
+}
+
+export default class VideoControl extends React.Component<Props, {}> {
+    constructor(props:any) {
+        super(props)
+        this._video = React.createRef()
+    }
+
+    _video: any
+    player: flv.Player | null = null
+    // when props(camera) changes, the onplay video changes
+    componentDidUpdate() {
+        // console.log(this.props)
+        // console.log(this._video.current.src)
+        // this._video.current.src= 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+        try {
+            this.player?.destroy()
+            this.player = flv.createPlayer({
+                type: 'flv',
+                isLive: true,
+                url: `ws://localhost:8000/rstp/1/?url=${this.props.video_url}`
+            })
+            this.player.attachMediaElement(this._video.current)
+            this.player.load()            
+        } catch(error) {
+            console.log(error)
+        }
+    }
+    componentWillUnmount() {
+        this.player?.destroy()
+    }
+
     render() {
         return (
             <Layout>
-                <Content></Content>
+                <Content>
+                    <div className='video-area'>
+                        <video ref={this._video} autoPlay={true}></video>
+                    </div>
+                </Content>
                 <Sider theme='light'>
                     <div className='title'>云台控制</div>
                     <div className='order'>
