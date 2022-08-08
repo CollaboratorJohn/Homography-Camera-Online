@@ -1,6 +1,6 @@
 import { Layout } from "antd"
-import React, { Component, Fragment } from 'react';
-const { Header, Content, Sider } = Layout
+import React from 'react';
+const { Content, Sider } = Layout
 
 export default class VideoLabel extends React.Component {
     render() {
