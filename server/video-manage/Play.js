@@ -6,17 +6,17 @@ function videoRequestHandler(ws, req) {
     const stream = WebSowebSocketStream(ws,
     {
         binary: true,
-        browserBufferTimeout: 1000000
+        browserBufferTimeout: 10
     },
     {
-        browserBufferTimeout: 1000000
+        browserBufferTimeout: 10
     })
     let url = req.query.url
     console.log(url)
 
     try {
         ffmpeg(url)
-            .addInputOption("-rtsp_transport", "tcp", "-buffer_size", "102400")  // 这里可以添加一些 RTSP 优化的参数
+            .addInputOption("-rtsp_transport", "tcp", "-buffer_size", "102400")
             .on("start", function () {
                 console.log(url, "Stream started.");
             })

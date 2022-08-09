@@ -14,24 +14,95 @@ export default class VideoControl extends React.Component<Props, {}> {
     constructor(props:any) {
         super(props)
         this._video = React.createRef()
-        // this.PTZControl = this.PTZControl.bind(this)
+        this.clock = this.clock.bind(this)
+        this.killVideoStream = this.killVideoStream.bind(this)
+        this.startVideoStream = this.startVideoStream.bind(this)
     }
 
+    // indicates the video tag
     _video: any
+
+    // indicates the flv player entity
     player: flv.Player | null = null
+
+    // make sure the video is real time when checkout the tag and back
+    realtime_sentinel: number | null = null
+
+    // kill video stream and sentinal
+    killVideoStream() {
+        if (this.player) {
+            this.player.pause();
+            this.player.unload();
+            this.player.detachMediaElement();
+            this.player.destroy();
+            this.player= null;
+        }
+        if(this.realtime_sentinel) {
+            clearInterval(this.realtime_sentinel)
+            this.realtime_sentinel = null
+        }
+    }
+
+    startVideoStream() {
+        // recreate player
+        this.player = flv.createPlayer({
+            type: 'flv',
+            isLive: true,
+            url: `ws://localhost:9000/vid/rtsp/1/?url=${this.props.video_url}`
+        }, {
+            enableStashBuffer: false,
+            fixAudioTimestampGap: false,
+            isLive: true,
+            lazyLoad: true,
+            autoCleanupSourceBuffer: true
+        })
+
+        //error handler
+        this.player?.on(flv.Events.ERROR,
+            (errorType: any, errorDetail: any, errorInfo: any):void => {
+                console.log("errorType:", errorType);
+                console.log("errorDetail:", errorDetail);
+                console.log("errorInfo:", errorInfo);
+                // deconstruct if this.player exist and problems occur
+                this.killVideoStream()
+            }
+        )
+
+        this.player.attachMediaElement(this._video.current)
+        this.player.load()
+
+        // create realtime sentinel
+        this.player.play()
+        this.realtime_sentinel = setInterval(this.clock(), 5000)
+    }
+
+    // where activates sentinel
+    clock():Function {
+        var lastTime: number|undefined = lastTime 
+        let self = this
+        let sentinel:Function = lastTime ? function():void {
+            lastTime = 0
+        } : function():void {
+            if (self.player?.buffered.length) {
+                console.log(lastTime, self.player.currentTime)
+                if(lastTime !== undefined && self.player.currentTime - lastTime < 1) {
+                    self.killVideoStream()
+                    self.startVideoStream()
+                    lastTime = undefined
+                    return
+                }
+                lastTime = self.player.currentTime
+            }
+        }
+        return sentinel
+    }
 
     // when props(camera) changes, the onplay video changes
     componentDidUpdate() {
-        console.log(process.env.REACT_APP_API)
         try {
-            this.player?.destroy()
-            this.player = flv.createPlayer({
-                type: 'flv',
-                isLive: true,
-                url: `ws://localhost:9000/vid/rtsp/1/?url=${this.props.video_url}`
-            })
-            this.player.attachMediaElement(this._video.current)
-            this.player.load()
+            // deconstruct if this.player exist and problems occur
+            this.killVideoStream()
+            this.startVideoStream()
         } catch(error) {
             console.log(error)
         }
@@ -39,7 +110,7 @@ export default class VideoControl extends React.Component<Props, {}> {
 
     // destroy video player entity
     componentWillUnmount() {
-        this.player?.destroy()
+        this.killVideoStream()
     }
 
     render() {
@@ -47,7 +118,9 @@ export default class VideoControl extends React.Component<Props, {}> {
             <Layout>
                 <Content>
                     <div className='video-area'>
-                        <video ref={this._video} autoPlay={true}></video>
+                        <video
+                            ref={this._video}
+                            ></video>
                     </div>
                 </Content>
                 <Sider theme='light'>
