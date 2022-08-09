@@ -9,12 +9,14 @@ module.exports = function(app) {
             changeOrigin: true,
             pathRewrite: {
                 "^/api": ""
-        }})
+        }}),
+        proxy('/vid', {
+            target: 'ws://localhost:8000',
+            changeOrigin: true,
+            ws: true,
+            pathRewrite: {
+                "^/vid": ""
+            }
+        })
     )
-    // app.use(
-    //     proxy('/rtsp', {
-    //         target:`ws://localhost:8000`,
-    //         changeOrigin: true
-    //     })
-    // )
 }

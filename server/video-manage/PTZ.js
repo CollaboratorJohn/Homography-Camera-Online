@@ -2,6 +2,7 @@ const http = require('http');
 const md5 = require('md5-node');
 const router = require('express').Router();
 const bodyParser = require('body-parser');
+
 // manage ptz of camera
 function sleep() {
     const time = Date.now()

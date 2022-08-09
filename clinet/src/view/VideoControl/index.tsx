@@ -22,12 +22,13 @@ export default class VideoControl extends React.Component<Props, {}> {
 
     // when props(camera) changes, the onplay video changes
     componentDidUpdate() {
+        console.log(process.env.REACT_APP_API)
         try {
             this.player?.destroy()
             this.player = flv.createPlayer({
                 type: 'flv',
                 isLive: true,
-                url: `ws://localhost:8000/rstp/1/?url=${this.props.video_url}`
+                url: `ws://localhost:9000/vid/rtsp/1/?url=${this.props.video_url}`
             })
             this.player.attachMediaElement(this._video.current)
             this.player.load()

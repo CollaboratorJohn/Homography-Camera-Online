@@ -42,7 +42,7 @@ function initVideoCallback(app, path) {
     expressWebSocket(app, null, {
         perMessageDeflate: true
     });
-    app.ws("/rstp/:id/", videoRequestHandler)
+    app.ws("/rtsp/:id/", videoRequestHandler)
     ffmpeg.setFfmpegPath(path)
 }
 

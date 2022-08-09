@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Layout, Menu } from 'antd';
+import { Button, Layout, message } from 'antd';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons'
 import MenuBar from './MenuBar';
 import VideoRectify from './VideoRectify';
@@ -25,6 +25,7 @@ class AdminPage extends React.Component<{},State> {
         'vid_ctrl'
         }
         this.changeState = this.changeState.bind(this)
+        this.addVideo = this.addVideo.bind(this)
     }
     
     componentDidMount() {
@@ -46,6 +47,14 @@ class AdminPage extends React.Component<{},State> {
         this.setState({
           key: _key
         })
+    }
+
+    addVideo():void {
+        if(store.getState().camera !== '' ) {
+            message.warning('当前系统只支持新增一个摄像头')
+            return
+        }
+        store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
     }
 
     render() {
@@ -86,7 +95,8 @@ class AdminPage extends React.Component<{},State> {
                             </div>
                             <Button type='primary' icon={<PlusOutlined/>
                             } onClick={()=>{
-                                store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
+                                this.addVideo()
+                                // store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
                                 // this.setState({
                                 //     videolist: ['rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream']
                                 // })

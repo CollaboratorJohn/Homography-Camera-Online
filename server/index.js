@@ -21,14 +21,11 @@ permissionCallback(app)
 initPTZControlCallback(app)
 initVideoCallback(app, FFMPEG_PATH)
 
-// app.post('/ptz',(req, res) => {
-//     console.log(req.body)
-//     // const username = req.params.username
-//     // const passwd = req.params.passwd
-//     // const motion = req.params.motion
-    
-//     // await PTZControl(username, passwd, motion)
-//     // // console.log(_res)
-//     res.json({})
-// })
+// add static source files in production
+if(process.env.ENV === 'PROD') {
+    app.use(express.static(path.join(__dirname, public)))
+    app.use(express.static(path.join(__dirname, build)))    
+}
+
+
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
