@@ -1,7 +1,7 @@
 const { getDb } = require('../db')
 
 const loginUsrCallback = app => {
-    app.get('/login',(req, res) => {
+    app.get('/api/login',(req, res) => {
         const user = req.query.user
         const passwd = req.query.passwd
         // search db

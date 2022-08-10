@@ -196,7 +196,7 @@ async function requestNonce(username, passwd, motion) {
 
 function initPTZControlCallback(app) {
     app.use(bodyParser.json())
-    app.post('/ptz',async (req, res) => {
+    app.post('/api/ptz',async (req, res) => {
         const username = req.body.username
         const passwd = req.body.passwd
         const motion = req.body.motion

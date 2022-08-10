@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 // const { checkLoginMiddleware } = require('./authorize')
 const { registUsrCallback } = require('./user-manage/registControl')
 const { loginUsrCallback } = require('./user-manage/loginControl')
@@ -23,8 +24,12 @@ initVideoCallback(app, FFMPEG_PATH)
 
 // add static source files in production
 if(process.env.ENV === 'PROD') {
-    app.use(express.static(path.join(__dirname, public)))
-    app.use(express.static(path.join(__dirname, build)))    
+    app.use(express.static(path.join(__dirname, './build')))
+    app.get('*', (req, res, next) => {
+        if (req.url.startsWith('/api')) return next();
+        if (req.url.startsWith('/vid')) return next();
+        res.sendFile(path.join(__dirname + '/build/index.html'));
+    });  
 }
 
 

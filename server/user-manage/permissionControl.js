@@ -20,7 +20,7 @@ const checkLoginMiddleware = (req, res, next) => {
 const permissionCallback = app => {
     app.use(cookieParser());
     
-    app.get('/permission',checkLoginMiddleware, (req, res) => {
+    app.get('/api/permission',checkLoginMiddleware, (req, res) => {
         res.json({ message: 'authenticated' })
     })
 }
