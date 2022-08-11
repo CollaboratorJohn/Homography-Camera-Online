@@ -96,10 +96,6 @@ class AdminPage extends React.Component<{},State> {
                             <Button type='primary' icon={<PlusOutlined/>
                             } onClick={()=>{
                                 this.addVideo()
-                                // store.dispatch(onAdd('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
-                                // this.setState({
-                                //     videolist: ['rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream']
-                                // })
                             }}>新增摄像头</Button>
                         </div>
                     </Sider>

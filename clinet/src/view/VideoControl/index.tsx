@@ -48,7 +48,7 @@ export default class VideoControl extends React.Component<Props, {}> {
         this.player = flv.createPlayer({
             type: 'flv',
             isLive: true,
-            url: `ws://${window.location.host}:${window.location.port}/vid/rtsp/1/?url=${this.props.video_url}`
+            url: `ws://${window.location.host}/vid/rtsp/1/?url=${this.props.video_url}`
         }, {
             enableStashBuffer: false,
             fixAudioTimestampGap: false,
@@ -95,6 +95,19 @@ export default class VideoControl extends React.Component<Props, {}> {
             }
         }
         return sentinel
+    }
+
+    componentDidMount() {
+        // console.log('mnt')
+        if(this.props.video_url !== '') {
+            try {
+                // deconstruct if this.player exist and problems occur
+                this.killVideoStream()
+                this.startVideoStream()
+            } catch(error) {
+                console.log(error)
+            }
+        }
     }
 
     // when props(camera) changes, the onplay video changes

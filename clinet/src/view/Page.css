@@ -62,6 +62,16 @@ video {
     width: 100%
 }
 
+.editor {
+    padding: 5px;
+    height: 100%;
+    width: 100%
+}
+
+.text {
+    height: calc(100% - 10px);
+    width: calc(100% - 10px);
+}
 .ant-btn {
     margin: 5px;
 }
@@ -70,4 +80,19 @@ video {
     display: flex!important;
     width: 100%!important;
     min-height: 100%!important;
+}
+
+.ant-tabs {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ant-tabs-content {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ant-tabs-content-top {
+    height: 100% !important;
+    width: 100% !important;
 }

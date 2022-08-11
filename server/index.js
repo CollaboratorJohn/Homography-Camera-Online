@@ -6,11 +6,12 @@ const { loginUsrCallback } = require('./user-manage/loginControl')
 const { permissionCallback } = require('./user-manage/permissionControl')
 const { initVideoCallback } = require('./video-manage/Play')
 const { initPTZControlCallback } = require('./video-manage/PTZ')
+const { initSocketEvents } = require('./online-session')
 
 const dotenv = require('dotenv')
 dotenv.config()
 
-const app = express()
+let app = express()
 
 const PORT = process.env.PORT
 // const VIDEO_PORT = process.env.VIDEO_PORT
@@ -32,5 +33,7 @@ if(process.env.ENV === 'PROD') {
     });  
 }
 
+// add socket.io realtime communatcate function
+app = initSocketEvents(app)
 
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
