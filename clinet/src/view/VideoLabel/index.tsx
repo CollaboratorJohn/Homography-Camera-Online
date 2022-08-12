@@ -76,7 +76,7 @@ export default class VideoLabel extends React.Component<{}, State> {
             }
             notification.open({
                 message: 'notice',
-                description: `${newcode.title} Online code has been updated`
+                description: `Assistant${newcode.title}'s Online code has been updated`
             })
         }))
 
