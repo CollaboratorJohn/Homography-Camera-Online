@@ -17,7 +17,7 @@ function videoRequestHandler(ws, req) {
 
     try {
         ffmpeg(url)
-            .addInputOption("-rtsp_transport", "tcp", "-buffer_size", "102400")
+            .addInputOption("-rtsp_transport", "udp", "-buffer_size", "102400")
             .on("start", function () {
                 console.log(url, "Stream started.");
             })

@@ -16,10 +16,12 @@ export default class App extends React.Component<{},State> {
     super(props)
     this.state = { key: '0' }
     this.changeState = this.changeState.bind(this)
-    socket.emit('login',{
-      name: Base64.encode(Date.now().toString()),
-      room: document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)![0]
-    })
+    if(document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)) {
+      socket.emit('login',{
+        name: Base64.encode(Date.now().toString()),
+        room: document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)![0]
+      })      
+    }
   }
   changeState(key:string):void {
     this.setState({

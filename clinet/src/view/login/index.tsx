@@ -2,6 +2,8 @@ import { Button, Form, Input, Radio, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import React from 'react';
 import axios from 'axios'
+import socket from "../../utli/socketIO";
+import { Base64 } from 'js-base64'
 
 interface State {
   login_state: String
@@ -53,6 +55,12 @@ export default class Login extends React.Component<{}, State> {
         if(msg === '登录成功') {
           message.info(msg)
           window.location.replace('/admin')
+          if(document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)) {
+            socket.emit('login',{
+              name: Base64.encode(Date.now().toString()),
+              room: document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)![0]
+            })      
+          }
         } else {
           message.error(msg)
         }

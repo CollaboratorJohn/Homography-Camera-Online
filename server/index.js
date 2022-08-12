@@ -7,7 +7,6 @@ const { permissionCallback } = require('./user-manage/permissionControl')
 const { initVideoCallback } = require('./video-manage/Play')
 const { initPTZControlCallback } = require('./video-manage/PTZ')
 const { initSocketEvents } = require('./online-session')
-
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -15,7 +14,6 @@ let app = express()
 
 const PORT = process.env.PORT
 const VIDEO_PORT = process.env.VIDEO_PORT
-// const VIDEO_PORT = process.env.VIDEO_PORT
 const FFMPEG_PATH = process.env.FFMPEG_PATH
 
 registUsrCallback(app)
@@ -36,6 +34,6 @@ if(process.env.ENV === 'PROD') {
 
 // add socket.io realtime communatcate function
 app = initSocketEvents(app)
+// require('./setupProxy')
 
-// add socketio img frame
 app.server.listen(PORT, () => console.log(`Server listening on ${PORT}`))

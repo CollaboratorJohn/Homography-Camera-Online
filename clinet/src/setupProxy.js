@@ -6,6 +6,11 @@ module.exports = function(app) {
             target:'http://localhost:8000',
             changeOrigin: true
         }),
+        proxy('/vid', {
+            target: 'http://localhost:8001',
+            changeOrigin: true,
+            ws: true
+        }),
         proxy('/assist', {
             target: 'http://localhost:8000',
             changeOrigin: true,
