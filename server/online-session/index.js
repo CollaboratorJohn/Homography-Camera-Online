@@ -1,6 +1,8 @@
 
 const http = require('http')
+const { code_state } = require('./repository')
 const { addAssistant, getAssistant, deleteAssistant } = require('./assistants')
+const bodyParser = require('body-parser');
 
 // create server instance which supports socketio
 function initOnlineSession(app) {
@@ -11,6 +13,13 @@ function initOnlineSession(app) {
 
 // return socketio entity
 function initSocketEvents(app) {
+    // upload newest code to clinet
+    app.use(bodyParser.json())
+    app.post('/api/title',(req, res) => {
+        console.log(code_state)
+        res.send(code_state[req.body.title])
+    })
+
     const {server, io} = initOnlineSession(app)
     io.on('connection', socket => {
         // when an assistant logs in
@@ -24,9 +33,10 @@ function initSocketEvents(app) {
             // callback()
         })
         // when assistants uploads code to the observer
-        socket.on('uploadCode', code => {
+        socket.on('uploadCode', newcode => {
             const assistant = getAssistant(socket.id)
-            io.in(assistant.room).emit('code',code)
+            code_state[newcode.title] = newcode.code
+            io.in(assistant.room).emit('code',{code:newcode.code, title:newcode.title})
         })
         // when an assistant logs out
         socket.on('disconnect', () => {

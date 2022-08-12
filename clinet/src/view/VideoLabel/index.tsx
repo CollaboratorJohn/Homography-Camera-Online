@@ -1,25 +1,57 @@
 // code mirror
-import CodeMirror, { ReactCodeMirrorRef } from "@uiw/react-codemirror";
-import { cpp } from "@codemirror/lang-cpp"
-import { xml } from "@codemirror/lang-xml"
+import CodeMirror from "@uiw/react-codemirror";
+import langConfig from './langConfig'
 
-import { Layout, Tabs, notification, Button } from "antd"
+import axios from 'axios'
+import { Layout, Tabs, notification, Button, Select, Radio, Space, Popover, message } from "antd"
 import React from 'react'
 import { Base64 } from "js-base64"
 import io from 'socket.io-client'
+
+import store from '../../store/store'
+import { onSaveState } from '../../store/action';
+
 const { Content, Sider } = Layout
 const { TabPane } = Tabs;
+const { Option } = Select;
 
 interface State {
-    codeedit:string,
-    codeupload:string
+    codeonedit: string,
+    codeupload: string,
+    title: string
 }
+
+let children:React.ReactNode[] = ['1', '2', '3', '4', '5'].map(item => {
+    return <Option key={item}>{item}</Option>
+})
+
 export default class VideoLabel extends React.Component<{}, State> {
     socket = io(`http://${window.location.host}/`, { path:'/assist' });
 
-    updateCode() {
-        this.socket.emit('uploadCode',this.state.codeedit)
-        console.log(this.state.codeedit)
+    updateCode():void {
+        if(this.state.title === '') {
+            message.info('Code invalid!')
+            return
+        }
+        this.socket.emit('uploadCode',{
+            code:this.state.codeonedit,
+            title:this.state.title
+        })
+        console.log(this.state.codeonedit)
+    }
+
+    titleChange(value: string):void {
+        axios.post('/api/title', {
+            title: value
+        }).then(res => {
+            this.setState({
+                codeupload: res.data,
+                codeonedit: '',
+                title: value
+            })
+        }, err => {
+            console.log(err)
+        })
     }
 
     constructor(props:any) {
@@ -36,28 +68,56 @@ export default class VideoLabel extends React.Component<{}, State> {
         })
         
         // Code update (passive)
-        this.socket.on('code', (code => {
-            this.setState({
-                codeupload:code
-            })
+        this.socket.on('code', ((newcode:{code:string,title:string}) => {
+            if(newcode.title === this.state.title) {
+                this.setState({
+                    codeupload: newcode.code
+                })
+            }
             notification.open({
                 message: 'notice',
-                description: 'Online code has been updated'
+                description: `${newcode.title} Online code has been updated`
             })
         }))
 
         this.state = {
-            codeedit:'',
-            codeupload:''
+            codeonedit:'',
+            codeupload:'',
+            title:'1'
         }
+
         this.updateCode = this.updateCode.bind(this)
+        this.titleChange = this.titleChange.bind(this)
     }
         
     componentDidMount() {
+        // the first time, init code redux store
+        if(!store.getState().code_page_state) {
+            store.dispatch(onSaveState(this.state))            
+        } else {
+            this.setState(store.getState().code_page_state)
+        }
+        // subscrisbe events
+        store.subscribe(() => {
+            console.log(store.getState())
+        })
+
+        this.setState(store.getState()?.code_page_state)
+
         this.socket.emit('login',{
             name: Base64.encode(Date.now().toString()),
             room: document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)![0]
         })
+    }
+
+    componentWillUnmount() {
+        // save current state 
+        store.dispatch(onSaveState(this.state))
+
+        // unsubscribe
+        store.subscribe(() =>
+            console.log(store.getState())
+        )()
     }
 
     render() {
@@ -71,7 +131,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                                     <CodeMirror
                                         value={this.state.codeupload}
                                         className='text'
-                                        extensions={[cpp(),xml()]}
+                                        extensions={[langConfig()]}
                                         readOnly
                                     />         
                                 </div>                            
@@ -79,10 +139,10 @@ export default class VideoLabel extends React.Component<{}, State> {
                             <TabPane tab="协同者" key="2">
                                 <div className='editor'>
                                     <CodeMirror
-                                        value={this.state.codeedit}
+                                        value={this.state.codeonedit}
                                         className='text'
-                                        extensions={[cpp(),xml()]}
-                                        onChange = { value => this.setState({codeedit:value}) }
+                                        extensions={[langConfig()]}
+                                        onChange = { value => this.setState({codeonedit:value}) }
                                     />
                                 </div>
                             </TabPane>
@@ -92,10 +152,29 @@ export default class VideoLabel extends React.Component<{}, State> {
                 <Sider theme='light'>
                     <div className='title'>标注选项</div>
                     <div className='order'>
-                        <div className='function-title'>
-                            <Button onClick={this.updateCode} type='primary'>Summit Code</Button>
-                        </div>
-                        <div className='function-title'></div>
+                        <Button onClick={this.updateCode} type='primary' style={{margin:'10px',display:'block'}}>Summit Code</Button>
+                        <Select
+                        value={this.state.title}
+                        style={{margin:'10px',display:'block'}}
+                        onChange={this.titleChange}>{children}</Select>
+                        <Popover content={
+                           <div>
+                                <h1>Unfinished!</h1>
+                                <p>When activate local file attachment,</p>
+                                <p>online editor will be deactivaed while </p>
+                                <p> you could debug offline with VSCode.</p>
+                                <p>Your local file will be uploaded automatically.</p>
+                            </div> 
+                        }
+                        placement="left">
+                          <Radio.Group value={1} style={{margin: '10px'}}>
+                            <Space direction="vertical">
+                                <Radio value={1}>Online Edit</Radio>
+                                <Radio value={2}>Attach to local file</Radio>
+                            </Space>                           
+                        </Radio.Group>   
+                        </Popover>
+                        
                     </div>
                 </Sider>
             </Layout>

@@ -65,11 +65,12 @@ video {
 .editor {
     padding: 5px;
     height: 100%;
-    width: 100%
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .text {
-    height: calc(100% - 10px);
+    height: 500px;
     width: calc(100% - 10px);
 }
 .ant-btn {

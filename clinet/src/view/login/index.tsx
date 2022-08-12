@@ -88,10 +88,10 @@ export default class Login extends React.Component<{}, State> {
         </Radio.Group>
       </Form.Item>
       <Form.Item label="用户名" name="user">
-        <Input placeholder="请输入用户名" />
+        <Input placeholder="请输入用户名"/>
       </Form.Item>
       <Form.Item label="密码" name="passwd">
-        <Input placeholder="请输入密码" />
+        <Input placeholder="请输入密码" type={'password'}/>
       </Form.Item>
       <Form.Item {...this.buttonItemLayout}>
         <Button type="primary" htmlType="submit">提交</Button>

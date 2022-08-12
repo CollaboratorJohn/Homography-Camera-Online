@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import './App.css';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import AdminPage from './view/AdminPage';
-import Login from './login/login';
-
-
-const { Header, Content, Sider} = Layout
+import Login from './view/login';
 
 interface State {
   key: string
