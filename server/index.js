@@ -14,6 +14,7 @@ dotenv.config()
 let app = express()
 
 const PORT = process.env.PORT
+const VIDEO_PORT = process.env.VIDEO_PORT
 // const VIDEO_PORT = process.env.VIDEO_PORT
 const FFMPEG_PATH = process.env.FFMPEG_PATH
 
@@ -21,7 +22,7 @@ registUsrCallback(app)
 loginUsrCallback(app)
 permissionCallback(app)
 initPTZControlCallback(app)
-initVideoCallback(app, FFMPEG_PATH)
+initVideoCallback(FFMPEG_PATH, VIDEO_PORT)
 
 // add static source files in production
 if(process.env.ENV === 'PROD') {
@@ -36,4 +37,5 @@ if(process.env.ENV === 'PROD') {
 // add socket.io realtime communatcate function
 app = initSocketEvents(app)
 
-app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
+// add socketio img frame
+app.server.listen(PORT, () => console.log(`Server listening on ${PORT}`))

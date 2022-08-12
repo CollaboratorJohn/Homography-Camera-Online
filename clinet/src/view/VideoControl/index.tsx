@@ -48,7 +48,7 @@ export default class VideoControl extends React.Component<Props, {}> {
         this.player = flv.createPlayer({
             type: 'flv',
             isLive: true,
-            url: `ws://${window.location.host}/vid/rtsp/1/?url=${this.props.video_url}`
+            url: `ws://${window.location.hostname}:8001/vid/rtsp/1/?url=${this.props.video_url}`
         }, {
             enableStashBuffer: false,
             fixAudioTimestampGap: false,

@@ -5,8 +5,7 @@ import langConfig from './langConfig'
 import axios from 'axios'
 import { Layout, Tabs, notification, Button, Select, Radio, Space, Popover, message } from "antd"
 import React from 'react'
-import { Base64 } from "js-base64"
-import io from 'socket.io-client'
+import socket from "../../utli/socketIO";
 
 import store from '../../store/store'
 import { onSaveState } from '../../store/action';
@@ -26,14 +25,14 @@ let children:React.ReactNode[] = ['1', '2', '3', '4', '5'].map(item => {
 })
 
 export default class VideoLabel extends React.Component<{}, State> {
-    socket = io(`http://${window.location.host}/`, { path:'/assist' });
+    // socket = io(`http://${window.location.host}/`, { path:'/assist' });
 
     updateCode():void {
         if(this.state.title === '') {
             message.info('Code invalid!')
             return
         }
-        this.socket.emit('uploadCode',{
+        socket.emit('uploadCode',{
             code:this.state.codeonedit,
             title:this.state.title
         })
@@ -56,7 +55,7 @@ export default class VideoLabel extends React.Component<{}, State> {
 
     constructor(props:any) {
         super(props)
-        this.socket.on('notification', (notif:{title: string, description: string}) => {
+        socket.on('notification', (notif:{title: string, description: string}) => {
             notification.config({
                 duration: 2
             })
@@ -68,7 +67,7 @@ export default class VideoLabel extends React.Component<{}, State> {
         })
         
         // Code update (passive)
-        this.socket.on('code', ((newcode:{code:string,title:string}) => {
+        socket.on('code', ((newcode:{code:string,title:string}) => {
             if(newcode.title === this.state.title) {
                 this.setState({
                     codeupload: newcode.code
@@ -91,6 +90,9 @@ export default class VideoLabel extends React.Component<{}, State> {
     }
         
     componentDidMount() {
+        // default load 1 state
+        this.titleChange('1')
+        
         // the first time, init code redux store
         if(!store.getState().code_page_state) {
             store.dispatch(onSaveState(this.state))            
@@ -103,11 +105,6 @@ export default class VideoLabel extends React.Component<{}, State> {
         })
 
         this.setState(store.getState()?.code_page_state)
-
-        this.socket.emit('login',{
-            name: Base64.encode(Date.now().toString()),
-            room: document.cookie.match(/(?<=(user=))(.*?)(?<=(;|$))/g)![0]
-        })
     }
 
     componentWillUnmount() {

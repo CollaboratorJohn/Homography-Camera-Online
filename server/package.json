@@ -27,6 +27,7 @@
     "pretty-quick": "^1.10.0",
     "request": "^2.88.0",
     "socket.io": "^4.5.1",
+    "socket.io-stream": "^0.9.1",
     "sqlite": "^4.1.2",
     "websocket-stream": "^5.5.2"
   },

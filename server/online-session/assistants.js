@@ -8,6 +8,7 @@ const addAssistant = (id, name, room) => {
     if(existing_assistants) return {error: 'assistant already exists!'}
     if(!name || !room) return {error: 'name and room is required'}
     assistants.push({id, name, room})
+    console.log(assistants.length)
     return {id, name, room}
 }
 

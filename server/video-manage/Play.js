@@ -1,6 +1,7 @@
 var expressWebSocket = require('express-ws')
 var ffmpeg = require('fluent-ffmpeg')
-const WebSowebSocketStream = require("websocket-stream/stream");
+const WebSowebSocketStream = require("websocket-stream/stream")
+const express = require('express')
 
 function videoRequestHandler(ws, req) {
     const stream = WebSowebSocketStream(ws,
@@ -38,12 +39,15 @@ function videoRequestHandler(ws, req) {
     }
 }
 
-function initVideoCallback(app, path) {
-    expressWebSocket(app, null, {
+function initVideoCallback(path, VIDEO_PORT) {
+    const videoapp = express()
+    expressWebSocket(videoapp, null, {
         perMessageDeflate: true
     });
-    app.ws("/vid/rtsp/:id/", videoRequestHandler)
+    videoapp.ws("/vid/rtsp/:id/", videoRequestHandler)
     ffmpeg.setFfmpegPath(path)
+    videoapp.listen(VIDEO_PORT, () => console.log(`Video server listening on ${VIDEO_PORT}`))
 }
 
+// new port for video
 module.exports = { initVideoCallback }

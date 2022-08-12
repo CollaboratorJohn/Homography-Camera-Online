@@ -25,7 +25,7 @@ function initSocketEvents(app) {
         // when an assistant logs in
         socket.on('login', ({name, room}) => {
             const assistant = addAssistant(socket.id, name, room)
-            // console.log(assistant)
+            
             // if(err) return callback(err)
             socket.join(assistant.room)
             socket.in(room).emit('notification',{title:'notification', description:`${assistant.name} enters!`})
@@ -47,7 +47,7 @@ function initSocketEvents(app) {
             }
         })        
     })
-    return server
+    return {server, io}
 }
 
 module.exports = { initSocketEvents }

@@ -28,6 +28,14 @@ npm run start
 ## Run in Production Mode
 Execute order in project root folder.
 You should change .env file in ./server folder. Make sure ENV=PROD is declareed in this file
+sample .env file(PORT and VIDEO_PORT are fixed):
+```bash
+PORT=8000
+VIDEO_PORT=8001
+ENV=DEV
+FFMPEG_PATH=D:\ffmpeg-4.3.1-win64-static\bin\ffmpeg.exe
+```
+orders:
 ```bash
 cd clinet && npm run build
 cp build ../server && cp public ../server
