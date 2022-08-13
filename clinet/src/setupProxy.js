@@ -7,7 +7,7 @@ module.exports = function(app) {
             changeOrigin: true
         }),
         proxy('/vid', {
-            target: 'http://localhost:8001',
+            target: 'http://202.121.181.12:8001',
             changeOrigin: true,
             ws: true
         }),

@@ -14,13 +14,16 @@ export default class VideoControl extends React.Component<Props, {}> {
     constructor(props:any) {
         super(props)
         this._video = React.createRef()
+        this._canvas = React.createRef()
         this.clock = this.clock.bind(this)
         this.killVideoStream = this.killVideoStream.bind(this)
         this.startVideoStream = this.startVideoStream.bind(this)
+        this.capture = this.capture.bind(this)
     }
 
     // indicates the video tag
     _video: any
+    _canvas: any
 
     // indicates the flv player entity
     player: flv.Player | null = null
@@ -48,7 +51,7 @@ export default class VideoControl extends React.Component<Props, {}> {
         this.player = flv.createPlayer({
             type: 'flv',
             isLive: true,
-            url: `ws://202.121.181.12:8001/vid/rtsp/1/?url=${this.props.video_url}`
+            url: `ws://${window.location.hostname}:8001/vid/rtsp/1/?url=${this.props.video_url}`
         }, {
             enableStashBuffer: false,
             fixAudioTimestampGap: false,
@@ -97,6 +100,39 @@ export default class VideoControl extends React.Component<Props, {}> {
         return sentinel
     }
 
+    // capture photo
+    capture() {
+            let canvas = this._canvas.current;
+            let video = this._video.current;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+            // canvas.toBlob(resolve, 'mime/jpeg',0.8)
+            console.log(canvas.toDataURL('image/jpeg'))
+
+            const base64ToBlob = function(code:string):Blob {
+                let parts = code.split(';base64,');
+                let contentType = parts[0].split(':')[1];
+                let raw = window.atob(parts[1]);
+                let rawLength = raw.length;
+                let uInt8Array = new Uint8Array(rawLength);
+                for(let i = 0; i < rawLength; ++i) {
+                    uInt8Array[i] = raw.charCodeAt(i);
+                }
+                return new Blob([uInt8Array], {
+                    type: contentType
+                });
+            };
+
+            let blob = base64ToBlob(canvas.toDataURL('image/jpeg')); //new Blob([content]);
+            let aLink = document.createElement('a');
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+            aLink.download = String(Date.now()) + '.jpg';
+            aLink.href = URL.createObjectURL(blob);
+            aLink.click();
+    }
+    
     componentDidMount() {
         // console.log('mnt')
         if(this.props.video_url !== '') {
@@ -131,9 +167,12 @@ export default class VideoControl extends React.Component<Props, {}> {
             <Layout>
                 <Content>
                     <div className='video-area'>
-                        <video
+                        <canvas className="relative full-area"
+                            ref={this._canvas}
+                        ></canvas>
+                        <video className="absolute full-area"
                             ref={this._video}
-                            ></video>
+                        ></video>
                     </div>
                 </Content>
                 <Sider theme='light'>
@@ -162,8 +201,14 @@ export default class VideoControl extends React.Component<Props, {}> {
                                 <Button type="primary" onClick={PTZControl(this.props.video_url,'IRIS-')}>光圈-</Button>
                             </div>
                             <div className='btn-set'>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM+')}>变倍+</Button>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM-')}>变倍-</Button>
+                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM+')}>放大+</Button>
+                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM-')}>缩小-</Button>
+                            </div>
+                        </div>
+                        <div className='function-title'>拍照</div>
+                        <div className='capture-photo'>
+                            <div className='btn-set'>
+                                <Button type="primary" onClick={this.capture}>拍照</Button>
                             </div>
                         </div>
                     </div>

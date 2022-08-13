@@ -23,10 +23,14 @@
 }
 
 .distort-rect {
-    margin: 5px 15px;
+    margin: 0px 15px;
 }
 
-.distort-rect .btn-set {
+.capture-photo {
+    margin:0 15px
+}
+
+.btn-set {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -55,11 +59,22 @@
     margin: 20px;
     width: calc(100% - 40px);
     height: calc(100% - 40px);
+    position: relative;
 }
 
-video {
+.full-area {
     height: 100%;
     width: 100%
+}
+
+.absolute {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.relative {
+    position: inherit;
 }
 
 .editor {

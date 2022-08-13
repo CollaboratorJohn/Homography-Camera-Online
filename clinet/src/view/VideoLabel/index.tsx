@@ -44,7 +44,7 @@ export default class VideoLabel extends React.Component<{}, State> {
             title: value
         }).then(res => {
             this.setState({
-                codeupload: res.data,
+                codeupload: String(res.data),
                 codeonedit: '',
                 title: value
             })
@@ -91,14 +91,20 @@ export default class VideoLabel extends React.Component<{}, State> {
         
     componentDidMount() {
         // default load 1 state
-        this.titleChange('1')
+        // this.titleChange('1')
         
         // the first time, init code redux store
-        if(!store.getState().code_page_state) {
-            store.dispatch(onSaveState(this.state))            
-        } else {
-            this.setState(store.getState().code_page_state)
-        }
+        // if(!store.getState()) {
+        //     store.dispatch(onSaveState(this.state))            
+        // } else {
+        //     console.log(store.getState())
+        //     this.setState({
+        //         codeonedit: store.getState().code_page_state.codeonedit,
+        //         codeupload: store.getState().code_page_state.codeupload,
+        //         title: store.getState().code_page_state.title,
+        //     })
+        //     this.forceUpdate()
+        // }
         // subscrisbe events
         store.subscribe(() => {
             console.log(store.getState())
@@ -115,6 +121,10 @@ export default class VideoLabel extends React.Component<{}, State> {
         store.subscribe(() =>
             console.log(store.getState())
         )()
+
+        // uninstall socket listeners
+        socket.removeAllListeners('code')
+        socket.removeAllListeners('notification')
     }
 
     render() {
@@ -156,7 +166,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                         onChange={this.titleChange}>{children}</Select>
                         <Popover content={
                            <div>
-                                <h1>Unfinished!</h1>
+                                <h1>Unfinish!</h1>
                                 <p>When activate local file attachment,</p>
                                 <p>online editor will be deactivaed while </p>
                                 <p> you could debug offline with VSCode.</p>

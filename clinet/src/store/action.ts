@@ -10,6 +10,6 @@ export const onSaveState = (payload: {
     codeonedit: string,
     codeupload: string,
     title: string
-} | null) => { 
+} ) => { 
     return { type: SAVESTATE, snapshot: payload }
 }

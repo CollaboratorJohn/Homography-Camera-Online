@@ -8,7 +8,7 @@ export default function reducer(state: {
         codeonedit:string,
         codeupload:string,
         title:string
-    } | null } = State,
+    } } = State,
     action: any) {
     switch(action.type) {
         case ADD:
