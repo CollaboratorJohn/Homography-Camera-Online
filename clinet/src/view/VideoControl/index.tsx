@@ -102,35 +102,39 @@ export default class VideoControl extends React.Component<Props, {}> {
 
     // capture photo
     capture() {
-            let canvas = this._canvas.current;
-            let video = this._video.current;
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-            // canvas.toBlob(resolve, 'mime/jpeg',0.8)
-            console.log(canvas.toDataURL('image/jpeg'))
+        let canvas = this._canvas.current;
+        let video = this._video.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        // canvas.toBlob(resolve, 'mime/jpeg',0.8)
+        console.log(canvas.toDataURL('image/jpeg'))
 
-            const base64ToBlob = function(code:string):Blob {
-                let parts = code.split(';base64,');
-                let contentType = parts[0].split(':')[1];
-                let raw = window.atob(parts[1]);
-                let rawLength = raw.length;
-                let uInt8Array = new Uint8Array(rawLength);
-                for(let i = 0; i < rawLength; ++i) {
-                    uInt8Array[i] = raw.charCodeAt(i);
-                }
-                return new Blob([uInt8Array], {
-                    type: contentType
-                });
-            };
+        const base64ToBlob = function(code:string):Blob {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+            let uInt8Array = new Uint8Array(rawLength);
+            for(let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], {
+                type: contentType
+            });
+        };
 
-            let blob = base64ToBlob(canvas.toDataURL('image/jpeg')); //new Blob([content]);
-            let aLink = document.createElement('a');
-            let evt = document.createEvent("HTMLEvents");
-            evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-            aLink.download = String(Date.now()) + '.jpg';
-            aLink.href = URL.createObjectURL(blob);
-            aLink.click();
+        let blob = base64ToBlob(canvas.toDataURL('image/jpeg')); //new Blob([content]);
+        let aLink = document.createElement('a');
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", true, true);
+        const tag = String(Date.now())
+        aLink.download = tag + '.jpg';
+        aLink.href = URL.createObjectURL(blob);
+        aLink.click();
+
+        // save blob to sessionStorage
+        sessionStorage.setItem(tag, String(canvas.toDataURL('image/jpeg')))
     }
     
     componentDidMount() {
@@ -176,39 +180,41 @@ export default class VideoControl extends React.Component<Props, {}> {
                     </div>
                 </Content>
                 <Sider theme='light'>
-                    <div className='title'>云台控制</div>
+                    <div className='title align-mid'>Control Menu</div>
                     <div className='order'>
-                        <div className='function-title'>云台调节</div>
-                        <div className='button-set'>
-                            <Button type="primary" icon={<ArrowUpOutlined rotate={-45}/>} onClick={PTZControl(this.props.video_url,'7')} size='large' />
-                            <Button type="primary" icon={<ArrowUpOutlined />} onClick={PTZControl(this.props.video_url,'8')} size='large' />
-                            <Button type="primary" icon={<ArrowUpOutlined rotate={45} />} onClick={PTZControl(this.props.video_url,'9')} size='large' />
-                            <Button type="primary" icon={<ArrowLeftOutlined />} onClick={PTZControl(this.props.video_url,'4')} size='large' />
-                            <Button type="primary" icon={<ReloadOutlined />} onClick={PTZControl(this.props.video_url,'5')} size='large' />
-                            <Button type="primary" icon={<ArrowRightOutlined />} onClick={PTZControl(this.props.video_url,'6')} size='large' />
-                            <Button type="primary" icon={<ArrowDownOutlined rotate={45} />} onClick={PTZControl(this.props.video_url,'1')} size='large' />
-                            <Button type="primary" icon={<ArrowDownOutlined />} onClick={PTZControl(this.props.video_url,'2')} size='large' />
-                            <Button type="primary" icon={<ArrowDownOutlined rotate={-45} />} onClick={PTZControl(this.props.video_url,'3')} size='large' />
-                        </div>
-                        <div className='function-title'>变焦调节</div>
-                        <div className='distort-rect'>
-                            <div className='btn-set'>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'FOCUS+')}>变焦+</Button>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'FOCUS-')}>变焦-</Button>
+                        <div className='function-area'>
+                            <div>Position adjustment</div>
+                            <div className='button-set'>
+                                <Button type="primary" icon={<ArrowUpOutlined rotate={-45}/>} onClick={PTZControl(this.props.video_url,'7')} size='large' />
+                                <Button type="primary" icon={<ArrowUpOutlined />} onClick={PTZControl(this.props.video_url,'8')} size='large' />
+                                <Button type="primary" icon={<ArrowUpOutlined rotate={45} />} onClick={PTZControl(this.props.video_url,'9')} size='large' />
+                                <Button type="primary" icon={<ArrowLeftOutlined />} onClick={PTZControl(this.props.video_url,'4')} size='large' />
+                                <Button type="primary" icon={<ReloadOutlined />} onClick={PTZControl(this.props.video_url,'5')} size='large' />
+                                <Button type="primary" icon={<ArrowRightOutlined />} onClick={PTZControl(this.props.video_url,'6')} size='large' />
+                                <Button type="primary" icon={<ArrowDownOutlined rotate={45} />} onClick={PTZControl(this.props.video_url,'1')} size='large' />
+                                <Button type="primary" icon={<ArrowDownOutlined />} onClick={PTZControl(this.props.video_url,'2')} size='large' />
+                                <Button type="primary" icon={<ArrowDownOutlined rotate={-45} />} onClick={PTZControl(this.props.video_url,'3')} size='large' />
                             </div>
-                            <div className='btn-set'>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'IRIS+')}>光圈+</Button>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'IRIS-')}>光圈-</Button>
+                            <div>Len adjustment</div>
+                            <div className='distort-rect'>
+                                <div className='btn-set'>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'FOCUS+')}>FOCUS+</Button>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'FOCUS-')}>FOCUS-</Button>
+                                </div>
+                                <div className='btn-set'>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'IRIS+')}>IRIS+</Button>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'IRIS-')}>IRIS-</Button>
+                                </div>
+                                <div className='btn-set'>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM+')}>Zoom+</Button>
+                                    <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM-')}>Zoom-</Button>
+                                </div>
                             </div>
-                            <div className='btn-set'>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM+')}>放大+</Button>
-                                <Button type="primary" onClick={PTZControl(this.props.video_url,'ZOOM-')}>缩小-</Button>
-                            </div>
-                        </div>
-                        <div className='function-title'>拍照</div>
-                        <div className='capture-photo'>
-                            <div className='btn-set'>
-                                <Button type="primary" onClick={this.capture}>拍照</Button>
+                            <div>Capture photo</div>
+                            <div className='capture-photo'>
+                                <div className='btn-set'>
+                                    <Button type="primary" onClick={this.capture}>Capture</Button>
+                                </div>
                             </div>
                         </div>
                     </div>

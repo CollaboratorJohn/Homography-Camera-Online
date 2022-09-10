@@ -33,11 +33,11 @@ export default class Login extends React.Component<{}, State> {
 
   onFinish = async (value: {user:string,passwd:string}) => {
     if(!value.user) {
-      message.info('请输入用户名')
+      message.info('Please type user name')
       return
     }
     if(!value.passwd) {
-      message.info('请输入密码')
+      message.info('Please type password')
       return
     }
     if(value.user && value.passwd) {
@@ -89,20 +89,20 @@ export default class Login extends React.Component<{}, State> {
       initialValues={{ layout: 'horizontal' }}
       onFinish={this.onFinish}
     >
-      <Form.Item label="选择" shouldUpdate={(prevValues:string, currentValues:string) => prevValues !== currentValues}>
+      <Form.Item label="Mode" shouldUpdate={(prevValues:string, currentValues:string) => prevValues !== currentValues}>
         <Radio.Group defaultValue={ "login" }>
-          <Radio.Button value = "login" onClick={() => {this.setState({login_state:'login'})}}>登录</Radio.Button>
-          <Radio.Button value = "regist" onClick={() => {this.setState({login_state:'regist'})}}>注册</Radio.Button>
+          <Radio.Button value = "login" onClick={() => {this.setState({login_state:'login'})}}>Login</Radio.Button>
+          <Radio.Button value = "regist" onClick={() => {this.setState({login_state:'regist'})}}>Regist</Radio.Button>
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="用户名" name="user">
-        <Input placeholder="请输入用户名"/>
+      <Form.Item label="User" name="user">
+        <Input placeholder="User name"/>
       </Form.Item>
-      <Form.Item label="密码" name="passwd">
-        <Input placeholder="请输入密码" type={'password'}/>
+      <Form.Item label="Password" name="passwd">
+        <Input placeholder="Password" type={'password'}/>
       </Form.Item>
       <Form.Item {...this.buttonItemLayout}>
-        <Button type="primary" htmlType="submit">提交</Button>
+        <Button type="primary" htmlType="submit">Submit</Button>
       </Form.Item>
     </Form>
     );

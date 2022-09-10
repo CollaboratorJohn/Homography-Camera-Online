@@ -5,7 +5,7 @@ import { message } from 'antd'
 export default function PTZControl(rtsp_addr: string, motion: string):MouseEventHandler<HTMLElement> {
     return () => {
         if(rtsp_addr === '') {
-            message.warning('当前未选择摄像头')
+            message.warning('Camera not select yet')
             return
         }
         // split name and passwd

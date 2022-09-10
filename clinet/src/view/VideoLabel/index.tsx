@@ -133,7 +133,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                 <Content>
                     <div className='video-area'>
                         <Tabs defaultActiveKey="1">
-                            <TabPane tab="观察者" key="1">
+                            <TabPane tab="Observer" key="1">
                                 <div className='editor'>
                                     <CodeMirror
                                         value={this.state.codeupload}
@@ -143,7 +143,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                                     />         
                                 </div>                            
                             </TabPane>
-                            <TabPane tab="协同者" key="2">
+                            <TabPane tab="Collaborator" key="2">
                                 <div className='editor'>
                                     <CodeMirror
                                         value={this.state.codeonedit}
@@ -157,7 +157,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                     </div>
                 </Content>
                 <Sider theme='light'>
-                    <div className='title'>标注选项</div>
+                    <div className='title align-mid'>Options</div>
                     <div className='order'>
                         <Button onClick={this.updateCode} type='primary' style={{margin:'10px',display:'block'}}>Summit Code</Button>
                         <Select
@@ -174,7 +174,7 @@ export default class VideoLabel extends React.Component<{}, State> {
                             </div> 
                         }
                         placement="left">
-                          <Radio.Group value={1} style={{margin: '10px'}}>
+                          <Radio.Group value={1} style={{margin: '2px'}}>
                             <Space direction="vertical">
                                 <Radio value={1}>Online Edit</Radio>
                                 <Radio value={2}>Attach to local file</Radio>

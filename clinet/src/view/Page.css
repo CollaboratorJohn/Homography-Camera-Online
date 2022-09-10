@@ -1,17 +1,33 @@
 .title {
     margin: 5px;
     height: 28px;
-    text-align: center;
     font-size: large;
     background-color: transparent;
 }
-
-.function-title {
+.sub-title {
     margin: 5px;
-    height: 20px;
+    height: 28px;
+    font-size: medium;
+    background-color: transparent;
+}
+.function-area {
+    margin: 5px;
+    height: 50%;
     text-align: left;
     font-size: medium;
     background-color: transparent;
+}
+
+.sub-function-area {
+    margin: 5px;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-mid {
+    text-align: center;
 }
 
 .button-set {
@@ -63,7 +79,6 @@
 }
 
 .full-area {
-    height: 100%;
     width: 100%
 }
 

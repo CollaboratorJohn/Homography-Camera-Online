@@ -64,16 +64,16 @@ class AdminPage extends React.Component<{},State> {
                     current_key = { this.state.key }
                     list = {
                         [
-                            {key:'vid_ctrl', label:'摄像头控制'},
-                            {key:'vid_rect', label:'视频校正'},
-                            {key:'vid_label', label:'视频标注'},
+                            {key:'vid_ctrl', label:'Camera control'},
+                            {key:'vid_rect', label:'Rectify video'},
+                            {key:'vid_label', label:'Label video'},
                         ]
                     }
                     path = '/admin'
                     stateChange = { this.changeState }/> 
                 <Layout>
                     <Sider theme='light'>
-                        <div className='title'>摄像头列表</div>
+                        <div className='title align-mid'>Camera list</div>
                         <div className='order'>
                             <div className='camara-list'>
                                 {
@@ -81,7 +81,7 @@ class AdminPage extends React.Component<{},State> {
                                         (item:string, index:number): JSX.Element => {
                                             return (
                                             <div className='camara-list-item' key={item}>
-                                                <div className='camara-selected'>{'摄像头'+index}</div>
+                                                <div className='camara-selected'>{'Camera'+index}</div>
                                                 <CloseOutlined onClick={
                                                     () => {
                                                         store.dispatch(onRemove('rtsp://admin:Abcd12345678@3.1.200.196:554/h265/ch33/main/av_stream'))
@@ -96,7 +96,7 @@ class AdminPage extends React.Component<{},State> {
                             <Button type='primary' icon={<PlusOutlined/>
                             } onClick={()=>{
                                 this.addVideo()
-                            }}>新增摄像头</Button>
+                            }}>Add new Camera</Button>
                         </div>
                     </Sider>
                     <Content>
