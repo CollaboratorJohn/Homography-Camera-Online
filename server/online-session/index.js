@@ -2,7 +2,7 @@
 const http = require('http')
 const { code_state } = require('./repository')
 const { addAssistant, getAssistant, deleteAssistant } = require('./assistants')
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser')
 
 // create server instance which supports socketio
 function initOnlineSession(app) {
@@ -14,7 +14,7 @@ function initOnlineSession(app) {
 // return socketio entity
 function initSocketEvents(app) {
     // upload newest code to clinet
-    app.use(bodyParser.json())
+    // app.use(bodyParser.json())
     app.post('/api/title',(req, res) => {
         console.log(code_state)
         res.send(code_state[req.body.title])

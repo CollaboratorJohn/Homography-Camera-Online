@@ -1,4 +1,4 @@
-const { getDb } = require('../db')
+const { getUserDb } = require('../db')
 const cookieParser = require('cookie-parser')
 
 const checkLoginMiddleware = (req, res, next) => {
@@ -6,7 +6,7 @@ const checkLoginMiddleware = (req, res, next) => {
         const user = req.cookies.user
         const user_id = req.cookies.user_id
         const sql_search = `select * from Users where user = \'${user}\' and passwd_hash = \'${user_id}\'`
-        const result = getDb().prepare(sql_search)
+        const result = getUserDb().prepare(sql_search)
         if(result.all().length !== 0) {
             next();
         } else {

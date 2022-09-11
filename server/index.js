@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path')
-// const { checkLoginMiddleware } = require('./authorize')
+const bodyParser = require('body-parser')
+const { imgControlCallback } = require('./img-manage/imgControl')
 const { registUsrCallback } = require('./user-manage/registControl')
 const { loginUsrCallback } = require('./user-manage/loginControl')
 const { permissionCallback } = require('./user-manage/permissionControl')
@@ -11,11 +12,12 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 let app = express()
-
+app.use(bodyParser.json({limit: '50mb'}))
 const PORT = process.env.PORT
 const VIDEO_PORT = process.env.VIDEO_PORT
 const FFMPEG_PATH = process.env.FFMPEG_PATH
 
+imgControlCallback(app)
 registUsrCallback(app)
 loginUsrCallback(app)
 permissionCallback(app)

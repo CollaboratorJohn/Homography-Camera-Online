@@ -1,4 +1,4 @@
-const { getDb } = require('../db')
+const { getUserDb } = require('../db')
 
 const loginUsrCallback = app => {
     app.get('/api/login',(req, res) => {
@@ -6,7 +6,7 @@ const loginUsrCallback = app => {
         const passwd = req.query.passwd
         // search db
         const sql_search = `select * from Users where user = \'${user}\'`
-        const result = getDb().prepare(sql_search)
+        const result = getUserDb().prepare(sql_search)
 
         if(result.all().length === 0) {
             res.json({message: '该用户不存在'})

@@ -3,11 +3,13 @@ import type { RadioChangeEvent } from 'antd';
 import { FileImageOutlined, HighlightOutlined, ShakeOutlined } from '@ant-design/icons'
 import React, { Fragment } from 'react'
 import ManageLabel from './ManageLabel'
-
+import Canvas from './label/Canvas'
+import axios from 'axios'
 const { Content, Sider } = Layout
 
 interface State {
-    images: Array<String>
+    images: Array<number>
+    current_img_url: string
     label_mode: number
     draw_mode: number
     brush_size: number
@@ -20,36 +22,34 @@ interface State {
 export default class VideoRectify extends React.Component<{},State> {
     constructor(props:any) {
         super(props)
-        this._canvas = React.createRef()
         this.state = {
             images: [],
             label_mode: 1,
             draw_mode: 1,
             brush_size: 10,
+            current_img_url: '',
             current_label: {name:null,color:null}
         }
         this.onSelectionModeChange = this.onSelectionModeChange.bind(this)
         this.onDrawModeChange = this.onDrawModeChange.bind(this)
         this.onBrushSizeChange = this.onBrushSizeChange.bind(this)
         this.changeCurrentLabel = this.changeCurrentLabel.bind(this)
+        this.onSelectImg = this.onSelectImg.bind(this)
+        this.stampToTime = this.stampToTime.bind(this)
+        this.canvasRef = React.createRef()
     }
 
-    _canvas:any
+    canvasRef:React.RefObject<any>
 
     componentDidMount() {
-        this.setState({
-            images: Object.keys(sessionStorage).map(item => {
-                    var date = new Date(Number(item)); 
-                    var Y = date.getFullYear()
-                    var M = date.getMonth()+1
-                    var D = date.getDate()
-                    var h = date.getHours()
-                    var m = date.getMinutes()>=10 ? date.getMinutes():"0"+date.getMinutes()
-                    var s = date.getSeconds()>=10 ? date.getSeconds():"0"+date.getSeconds()
-                    var ms = date.getMilliseconds()
-                    return Y +"-"+M+"-"+D+" "+h+":"+m+":"+s+"."+ms;
-            }).filter(item => !item.includes('NaN'))
+        axios.get('/api/savedimgs')
+        .then(res => {
+            const time_stamp = res.data.time
+            this.setState({
+                images: time_stamp
+            })            
         })
+        .catch(rej => console.error(rej))
     }
 
     onSelectionModeChange(e: RadioChangeEvent) {
@@ -68,15 +68,40 @@ export default class VideoRectify extends React.Component<{},State> {
         name:string | null,
         color: string | null
     }) {
-        console.log(this.state)
         this.setState({current_label})
     }
 
+    onSelectImg(key:number) {
+        this.setState({current_img_url: '/api/imgurl?id='+String(key)})
+    }
+
+    stampToTime(item:number):string {
+        var date = new Date(item)
+        var Y = date.getFullYear()
+        var M = date.getMonth() + 1
+        var D = date.getDate()
+        var h = date.getHours()
+        var m = date.getMinutes()>=10 ? date.getMinutes():"0"+date.getMinutes()
+        var s = date.getSeconds()>=10 ? date.getSeconds():"0"+date.getSeconds()
+        var ms = date.getMilliseconds()
+        return  Y +"-"+M+"-"+D+" "+h+":"+m+":"+s+"."+ms
+    }
+    
     render():JSX.Element {
         return (
             <Layout>
                 <Content>
-                    <div className='title align-left'>Canvas</div>
+                <div style={{ flex: 4, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <div style={{ position: 'relative', height: '100%'}}>
+                        <Canvas
+                            url={this.state.current_img_url}
+                            label={this.state.current_label}
+                            height={600}
+                            width={960}
+                            ref={this.canvasRef}
+                        />
+                    </div>
+                </div>
                 </Content>
                 <Sider theme='light'>
                     <div className='title align-mid'>Options</div>
@@ -90,17 +115,22 @@ export default class VideoRectify extends React.Component<{},State> {
                                         <div className='align-mid'>No images captured!</div> :
                                         <Menu>
                                             {
-                                                this.state.images.map((item):JSX.Element => 
-                                                    <Menu.Item key={String(item)}>
-                                                        <FileImageOutlined />
-                                                        {item}
-                                                    </Menu.Item>
-                                                )
+                                                this.state.images.map((item:number):JSX.Element => {
+                                                    const show_key = this.stampToTime(item)
+                                                    return (
+                                                        <Menu.Item
+                                                            key={show_key}
+                                                            onClick={()=>this.onSelectImg(item)}
+                                                        >
+                                                            <FileImageOutlined />
+                                                            {item}
+                                                        </Menu.Item>
+                                                    )
+                                                })
                                             }
                                         </Menu>                                         
                                     }
                                 </Fragment>
-
                             </div>
                         </div>
                         <div className='function-area'>

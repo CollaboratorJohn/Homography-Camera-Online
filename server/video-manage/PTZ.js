@@ -1,7 +1,7 @@
 const http = require('http');
 const md5 = require('md5-node');
 const router = require('express').Router();
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 
 // manage ptz of camera
 function sleep() {
@@ -195,7 +195,7 @@ async function requestNonce(username, passwd, motion) {
 }
 
 function initPTZControlCallback(app) {
-    app.use(bodyParser.json())
+    // app.use(bodyParser.json())
     app.post('/api/ptz',async (req, res) => {
         const username = req.body.username
         const passwd = req.body.passwd

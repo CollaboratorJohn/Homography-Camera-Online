@@ -2,22 +2,36 @@ const fs = require('fs')
 const path = require('path')
 const sqlite = require('better-sqlite3')
 
-const sqlite_path = path.join(__dirname, '../database.db')
+const user_sqlite_path = path.join(__dirname, '../database.db')
+const img_sqlite_path = path.join(__dirname, '../img.db')
 
-const db = new sqlite(sqlite_path, {})
+const user_db = new sqlite(user_sqlite_path, {})
+const img_db = new sqlite(img_sqlite_path, {})
 
 // establish user table
-if(!fs.existsSync(sqlite_path)) { 
+if(!fs.existsSync(user_sqlite_path)) { 
     const sql =`create table Users (
         id integer primary key autoincrement,
         user text not null, 
         passwd text not null,
         passwd_hash text not null
     );`
-    db.exec(sql)
-    console.log('initialize sql table')
+
+    user_db.exec(sql)
+    console.log('initialize user sql table')
 }
 
-const getDb = () => db
+// establish image table
+if(!fs.existsSync(img_sqlite_path)) { 
+    const sql =`create table Images (
+        capture_time integer primary key autoincrement not null, 
+        img text not null
+    );`
+    img_db.exec(sql)
+    console.log('initialize image sql table')
+}
 
-module.exports = { getDb }
+const getUserDb = () => user_db
+const getImageDb = () => img_db
+
+module.exports = { getUserDb, getImageDb }
